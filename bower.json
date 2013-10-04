@@ -1,0 +1,9 @@
+{
+  "name": "psa",
+  "version": "0.0.0",
+  "authors": [
+    "Brian Moore <guardbionic-github@yahoo.com>"
+  ],
+  "license": "MIT",
+  "private": true
+}
