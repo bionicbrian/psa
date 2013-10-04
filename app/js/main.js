@@ -1,14 +1,11 @@
 "use strict";
 
-var something = require("./something");
-
 var ps = angular.module("phonestacks", []);
 
-function helloCtrl($scope) {
-    $scope.name = "Brian";
-    setTimeout(function () {
-        $scope.name = "Someone else";
-    }, 5000);
-}
+// Controllers
+var helloCtrl = require("./helloCtrl");
+var goodbyeCtrl = require("./goodbyeCtrl");
 
+// Bootstrap
 ps.controller("HelloCtrl", ["$scope", helloCtrl]);
+ps.controller("GoodbyeCtrl", ["$scope", goodbyeCtrl]);
