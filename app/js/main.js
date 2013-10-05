@@ -2,10 +2,18 @@
 
 var ps = angular.module("phonestacks", []);
 
+function mainCtrl($scope) {
+    $scope.inCreateMode = true;
+    $scope.inActiveMode = false;
+}
+
 // Controllers
-var helloCtrl = require("./helloCtrl");
-var goodbyeCtrl = require("./goodbyeCtrl");
+var createCtrl = require("./createCtrl");
+var stackCtrl = require("./stackCtrl");
+var memberCtrl = require("./memberCtrl");
 
 // Bootstrap
-ps.controller("HelloCtrl", ["$scope", helloCtrl]);
-ps.controller("GoodbyeCtrl", ["$scope", goodbyeCtrl]);
+ps.controller("MainCtrl", ["$scope", mainCtrl]);
+ps.controller("CreateCtrl", ["$scope", createCtrl]);
+ps.controller("StackCtrl", ["$scope", stackCtrl]);
+ps.controller("MemberCtrl", ["$scope", memberCtrl]);
