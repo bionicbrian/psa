@@ -12,8 +12,15 @@ module.exports = function createCtrl($scope, $location, Stack) {
 },{}],2:[function(require,module,exports){
 "use strict";
 
-module.exports = function joinCtrl($scope) {
+module.exports = function joinCtrl($scope, $location, Stack) {
+    $scope.name = "";
 
+    $scope.join = function () {
+        if ($scope.name) {
+            Stack.members.push({ name: $scope.name });
+            $location.path("/stack");
+        }
+    };
 };
 
 },{}],3:[function(require,module,exports){
@@ -24,7 +31,8 @@ var ps = angular.module("phonestacks", []);
 ps.factory("Stack", function () {
     return {
         title: "",
-        penalty: ""
+        penalty: "",
+        members: []
     };
 });
 
@@ -40,7 +48,7 @@ var memberCtrl = require("./memberCtrl");
 // Bootstrap
 ps.controller("MainCtrl", ["$scope", mainCtrl]);
 ps.controller("CreateCtrl", ["$scope", "$location", "Stack", createCtrl]);
-ps.controller("JoinCtrl", ["$scope", "Stack", joinCtrl]);
+ps.controller("JoinCtrl", ["$scope", "$location", "Stack", joinCtrl]);
 ps.controller("StackCtrl", ["$scope", "Stack", stackCtrl]);
 ps.controller("MemberCtrl", ["$scope", memberCtrl]);
 
