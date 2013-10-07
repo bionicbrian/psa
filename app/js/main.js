@@ -2,9 +2,15 @@
 
 var ps = angular.module("phonestacks", []);
 
-function mainCtrl($scope) {
+ps.factory("Stack", function () {
+    return {
+        title: "",
+        penalty: ""
+    };
+});
 
-}
+
+function mainCtrl($scope) { }
 
 // Controllers
 var createCtrl = require("./createCtrl");
@@ -14,9 +20,9 @@ var memberCtrl = require("./memberCtrl");
 
 // Bootstrap
 ps.controller("MainCtrl", ["$scope", mainCtrl]);
-ps.controller("CreateCtrl", ["$scope", createCtrl]);
-ps.controller("JoinCtrl", ["$scope", joinCtrl]);
-ps.controller("StackCtrl", ["$scope", stackCtrl]);
+ps.controller("CreateCtrl", ["$scope", "$location", "Stack", createCtrl]);
+ps.controller("JoinCtrl", ["$scope", "Stack", joinCtrl]);
+ps.controller("StackCtrl", ["$scope", "Stack", stackCtrl]);
 ps.controller("MemberCtrl", ["$scope", memberCtrl]);
 
 var routes = require("./routes");

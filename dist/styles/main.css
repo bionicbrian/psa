@@ -1,1 +1,5 @@
-h1{font-family:Helvetica,Verdana;font-size:20pt}
+h1{font-size:20pt}
+.main a{display:block;font-size:18pt;line-height:1.5}
+.join input,.create input,.join button,.create button{font-size:18pt;line-height:1;display:block}
+.members ul{list-style:none;padding-left:0;}
+.members ul li{padding:10px 5px;border-bottom:1px dotted #aaa}

@@ -1,5 +1,5 @@
 "use strict";
 
-module.exports = function stackCtrl($scope) {
-    $scope.title = "Congrats Brian";
+module.exports = function stackCtrl($scope, Stack) {
+    $scope.stack = Stack;
 };
