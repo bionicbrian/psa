@@ -9,9 +9,14 @@ module.exports = function (grunt) {
             }
         },
         jade: {
-            compile: {
-                src: 'app/index.jade',
-                dest: 'dist/index.html'
+            build: {
+                files: [{
+                    expand: true,
+                    cwd: 'app/',
+                    src: '**/*.jade',
+                    dest: 'dist/',
+                    ext: ".html"
+                }]
             }
         },
         stylus: {
@@ -38,6 +43,15 @@ module.exports = function (grunt) {
                 src: ['**/*.html', '**/*.css'],
                 dest: 'dist/',
             },
+        },
+        connect: {
+            server: {
+                options: {
+                    port: 8088,
+                    base: 'dist',
+                    keepalive: true
+                }
+            }
         }
     });
 
@@ -47,6 +61,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jade');
     grunt.loadNpmTasks('grunt-contrib-stylus');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-connect');
 
     // The default tasks to run when you type: grunt
     grunt.registerTask('default', ['browserify', 'stylus', 'jade', 'copy']);

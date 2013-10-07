@@ -4,14 +4,14 @@
 module.exports = function createCtrl($scope) {
 
 };
+
 },{}],2:[function(require,module,exports){
 "use strict";
 
 var ps = angular.module("phonestacks", []);
 
 function mainCtrl($scope) {
-    $scope.inCreateMode = true;
-    $scope.inActiveMode = false;
+
 }
 
 // Controllers
@@ -25,7 +25,10 @@ ps.controller("CreateCtrl", ["$scope", createCtrl]);
 ps.controller("StackCtrl", ["$scope", stackCtrl]);
 ps.controller("MemberCtrl", ["$scope", memberCtrl]);
 
-},{"./createCtrl":1,"./memberCtrl":3,"./stackCtrl":4}],3:[function(require,module,exports){
+var routes = require("./routes");
+routes(ps);
+
+},{"./createCtrl":1,"./memberCtrl":3,"./routes":4,"./stackCtrl":5}],3:[function(require,module,exports){
 "use strict";
 
 module.exports = function memberCtrl($scope) {
@@ -35,6 +38,24 @@ module.exports = function memberCtrl($scope) {
     ];
 };
 },{}],4:[function(require,module,exports){
+"use strict";
+
+module.exports = function routes(app) {
+    app.config(function ($routeProvider, $locationProvider) {
+        $locationProvider.htmlMode(true);
+
+        $routeProvider
+            .when("/", {
+                templateUrl: "partials/main.html",
+                controller: "MainCtrl"
+            })
+            .when("/stack", {
+                templateUrl: "partials/stack.html",
+                controller: "StackCtrl"
+            });
+    });
+};
+},{}],5:[function(require,module,exports){
 "use strict";
 
 module.exports = function stackCtrl($scope) {

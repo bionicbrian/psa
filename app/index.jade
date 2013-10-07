@@ -8,19 +8,7 @@ html(ng-app="phonestacks")
         script(src="components/jquery/jquery.min.js")
         script(src="components/angular/angular.min.js")
 
-    body(ng-controller="MainCtrl")
-        div(ng-controller="CreateCtrl", ng-show="inCreateMode")
-            form
-                input(ng-model="title", placeholder="TITLE")
-                input(ng-model="penalty", placeholder="PENALTY")
-                button(ng-click="createStack()") CREATE
-
-        div(ng-controller="StackCtrl", ng-show="inActiveMode")
-            h1 {{title}}
-            h3 {{penalty}}
-
-        div(ng-controller="MemberCtrl", ng-show="inActiveMode")
-            ul
-                li(ng-repeat="member in members") {{member.name}}
+    body
+        ng-view
 
         script(src="js/main.js")

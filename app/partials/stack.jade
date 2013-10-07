@@ -1,0 +1,7 @@
+.stack
+    h1 {{title}}
+    h3 {{penalty}}
+
+    .members(ng-controller="MemberCtrl")
+        ul
+            li(ng-repeat="member in members") {{member.name}}
