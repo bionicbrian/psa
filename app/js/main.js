@@ -14,8 +14,8 @@ var memberCtrl = require("./memberCtrl");
 
 // Bootstrap
 ps.controller("MainCtrl", ["$scope", mainCtrl]);
-ps.controller("JoinCtrl", ["$scope", joinCtrl]);
 ps.controller("CreateCtrl", ["$scope", createCtrl]);
+ps.controller("JoinCtrl", ["$scope", joinCtrl]);
 ps.controller("StackCtrl", ["$scope", stackCtrl]);
 ps.controller("MemberCtrl", ["$scope", memberCtrl]);
 

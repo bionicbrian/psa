@@ -8,6 +8,13 @@ module.exports = function createCtrl($scope) {
 },{}],2:[function(require,module,exports){
 "use strict";
 
+module.exports = function joinCtrl($scope) {
+
+};
+
+},{}],3:[function(require,module,exports){
+"use strict";
+
 var ps = angular.module("phonestacks", []);
 
 function mainCtrl($scope) {
@@ -16,19 +23,21 @@ function mainCtrl($scope) {
 
 // Controllers
 var createCtrl = require("./createCtrl");
+var joinCtrl = require("./joinCtrl");
 var stackCtrl = require("./stackCtrl");
 var memberCtrl = require("./memberCtrl");
 
 // Bootstrap
 ps.controller("MainCtrl", ["$scope", mainCtrl]);
 ps.controller("CreateCtrl", ["$scope", createCtrl]);
+ps.controller("JoinCtrl", ["$scope", joinCtrl]);
 ps.controller("StackCtrl", ["$scope", stackCtrl]);
 ps.controller("MemberCtrl", ["$scope", memberCtrl]);
 
 var routes = require("./routes");
 routes(ps);
 
-},{"./createCtrl":1,"./memberCtrl":3,"./routes":4,"./stackCtrl":5}],3:[function(require,module,exports){
+},{"./createCtrl":1,"./joinCtrl":2,"./memberCtrl":4,"./routes":5,"./stackCtrl":6}],4:[function(require,module,exports){
 "use strict";
 
 module.exports = function memberCtrl($scope) {
@@ -37,17 +46,23 @@ module.exports = function memberCtrl($scope) {
         { name: "Rebecca" }
     ];
 };
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 "use strict";
 
 module.exports = function routes(app) {
-    app.config(function ($routeProvider, $locationProvider) {
-        $locationProvider.htmlMode(true);
-
+    app.config(function ($routeProvider) {
         $routeProvider
             .when("/", {
                 templateUrl: "partials/main.html",
                 controller: "MainCtrl"
+            })
+            .when("/create", {
+                templateUrl: "partials/create.html",
+                controller: "CreateCtrl"
+            })
+            .when("/join", {
+                templateUrl: "partials/join.html",
+                controller: "JoinCtrl"
             })
             .when("/stack", {
                 templateUrl: "partials/stack.html",
@@ -55,11 +70,11 @@ module.exports = function routes(app) {
             });
     });
 };
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 "use strict";
 
 module.exports = function stackCtrl($scope) {
     $scope.title = "Congrats Brian";
 };
-},{}]},{},[2])
+},{}]},{},[3])
 ;
