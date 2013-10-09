@@ -2,28 +2,26 @@
 
 var ps = angular.module("phonestacks", []);
 
-ps.factory("Stack", function () {
-    return {
-        title: "",
-        penalty: "",
-        members: []
-    };
-});
+var mainCtrl = require("./controllers/mainCtrl");
+var createCtrl = require("./controllers/createCtrl");
+var joinCtrl = require("./controllers/joinCtrl");
+var stackCtrl = require("./controllers/stackCtrl");
+var memberCtrl = require("./controllers/memberCtrl");
 
-function mainCtrl($scope) { }
+var StackResource = require("./providers/stackResource");
+var LocalResource = require("./providers/localResource");
 
-// Controllers
-var createCtrl = require("./createCtrl");
-var joinCtrl = require("./joinCtrl");
-var stackCtrl = require("./stackCtrl");
-var memberCtrl = require("./memberCtrl");
+// Add providers
+StackResource(ps);
+LocalResource(ps);
 
-// Bootstrap
-ps.controller("MainCtrl", ["$scope", mainCtrl]);
+// Bootstrap controllers
+ps.controller("MainCtrl", ["$scope", "$location", "Stack", "Local", mainCtrl]);
 ps.controller("CreateCtrl", ["$scope", "$location", "Stack", createCtrl]);
-ps.controller("JoinCtrl", ["$scope", "$location", "Stack", joinCtrl]);
+ps.controller("JoinCtrl", ["$scope", "$location", "Stack", "Local", joinCtrl]);
 ps.controller("StackCtrl", ["$scope", "Stack", stackCtrl]);
-ps.controller("MemberCtrl", ["$scope", memberCtrl]);
+ps.controller("MemberCtrl", ["$scope", "Stack", memberCtrl]);
 
+// Configure routes
 var routes = require("./routes");
 routes(ps);

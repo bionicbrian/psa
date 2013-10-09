@@ -13,20 +13,13 @@ module.exports = function createCtrl($scope, $location, Stack) {
 },{}],2:[function(require,module,exports){
 "use strict";
 
-module.exports = function joinCtrl($scope, $location, Stack) {
+module.exports = function joinCtrl($scope, $location, Stack, Local) {
     $scope.name = "";
     $scope.passphrase = Stack.passphrase || "";
 
-    // function createStack() {
-    //     if (!Stack.title) {
-    //         Stack.title = "Cool party";
-    //         Stack.penalty = "Buy a round";
-    //     }
-    // }
-
     $scope.join = function () {
         if ($scope.name && $scope.passphrase && Stack.title) {
-            // createStack();
+            Local.create(Stack.title, $scope.passphrase, $scope.name);
             Stack.members.push({ name: $scope.name });
             $location.path("/stack");
         }
@@ -36,45 +29,118 @@ module.exports = function joinCtrl($scope, $location, Stack) {
 },{}],3:[function(require,module,exports){
 "use strict";
 
+module.exports = function mainCtrl($scope, $location, Stack, Local) {
+    if (Local.name) {
+        $scope.name = Local.name;
+        $scope.title = Local.title;
+        $scope.passphrase = Local.passphrase;
+    }
+
+    $scope.rejoin = function () {
+        Stack.rejoin($scope.passphrase, $scope.name);
+        $location.path("/stack");
+    }
+};
+},{}],4:[function(require,module,exports){
+"use strict";
+
+module.exports = function memberCtrl($scope, Stack) {
+    $scope.members = Stack.members;
+};
+},{}],5:[function(require,module,exports){
+"use strict";
+
+module.exports = function stackCtrl($scope, Stack) {
+    $scope.stack = Stack;
+};
+
+},{}],6:[function(require,module,exports){
+"use strict";
+
 var ps = angular.module("phonestacks", []);
 
-ps.factory("Stack", function () {
-    return {
-        title: "",
-        penalty: "",
-        members: []
-    };
-});
+var mainCtrl = require("./controllers/mainCtrl");
+var createCtrl = require("./controllers/createCtrl");
+var joinCtrl = require("./controllers/joinCtrl");
+var stackCtrl = require("./controllers/stackCtrl");
+var memberCtrl = require("./controllers/memberCtrl");
 
+var StackResource = require("./providers/stackResource");
+var LocalResource = require("./providers/localResource");
 
-function mainCtrl($scope) { }
+// Add providers
+StackResource(ps);
+LocalResource(ps);
 
-// Controllers
-var createCtrl = require("./createCtrl");
-var joinCtrl = require("./joinCtrl");
-var stackCtrl = require("./stackCtrl");
-var memberCtrl = require("./memberCtrl");
-
-// Bootstrap
-ps.controller("MainCtrl", ["$scope", mainCtrl]);
+// Bootstrap controllers
+ps.controller("MainCtrl", ["$scope", "$location", "Stack", "Local", mainCtrl]);
 ps.controller("CreateCtrl", ["$scope", "$location", "Stack", createCtrl]);
-ps.controller("JoinCtrl", ["$scope", "$location", "Stack", joinCtrl]);
+ps.controller("JoinCtrl", ["$scope", "$location", "Stack", "Local", joinCtrl]);
 ps.controller("StackCtrl", ["$scope", "Stack", stackCtrl]);
-ps.controller("MemberCtrl", ["$scope", memberCtrl]);
+ps.controller("MemberCtrl", ["$scope", "Stack", memberCtrl]);
 
+// Configure routes
 var routes = require("./routes");
 routes(ps);
 
-},{"./createCtrl":1,"./joinCtrl":2,"./memberCtrl":4,"./routes":5,"./stackCtrl":6}],4:[function(require,module,exports){
+},{"./controllers/createCtrl":1,"./controllers/joinCtrl":2,"./controllers/mainCtrl":3,"./controllers/memberCtrl":4,"./controllers/stackCtrl":5,"./providers/localResource":7,"./providers/stackResource":8,"./routes":9}],7:[function(require,module,exports){
 "use strict";
 
-module.exports = function memberCtrl($scope) {
-    $scope.members = [
-        { name: "Brian" },
-        { name: "Rebecca" }
-    ];
+module.exports = function LocalResource(app) {
+    app.factory("Local", function () {
+        var local = {};
+
+        if (window.localStorage) {
+            local.title = window.localStorage.title;
+            local.passphrase = window.localStorage.passphrase;
+            local.name = window.localStorage.name;
+        }
+
+        local.create = function (title, passphrase, name) {
+            window.localStorage.title = title;
+            window.localStorage.passphrase = passphrase;
+            window.localStorage.name = name;
+        };
+
+        return local;
+    });
 };
-},{}],5:[function(require,module,exports){
+
+},{}],8:[function(require,module,exports){
+"use strict";
+
+module.exports = function StackResource(app) {
+    app.factory("Stack", function () {
+        var stack = {
+            title: "",
+            penalty: "",
+            members: []
+        };
+
+        stack.rejoin = function (passphrase, name) {
+            // AJAX request here
+            stack.title = "Mock title";
+            stack.penalty = "Buy a round";
+            stack.passphrase = passphrase;
+            stack.members.push({ name: name });
+        };
+
+        stack.create = function (title, penalty) {
+            // AJAX request here
+            stack.title = title;
+            stack.penalty = penalty;
+        };
+
+        return stack;
+    });
+};
+
+// module.exports = function stackFactory($resource) {
+//     return $resource("/stack/:Id",
+//                      { Id: "@Id" },
+//                      { "update": { method:"PUT" } });
+// };
+},{}],9:[function(require,module,exports){
 "use strict";
 
 module.exports = function routes(app) {
@@ -98,12 +164,5 @@ module.exports = function routes(app) {
             });
     });
 };
-},{}],6:[function(require,module,exports){
-"use strict";
-
-module.exports = function stackCtrl($scope, Stack) {
-    $scope.stack = Stack;
-};
-
-},{}]},{},[3])
+},{}]},{},[6])
 ;

@@ -1,3 +1,8 @@
 .main
+    .rejoin(ng-show="name")
+        p Hi {{name}}, would you like to rejoin the&nbsp;
+            a(ng-click="rejoin()") {{title}}
+            | &nbsp;stack?
+
     a(href="#/join") JOIN
     a(href="#/create") CREATE
