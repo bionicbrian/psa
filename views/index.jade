@@ -1,0 +1,17 @@
+doctype html
+html(ng-app="phonestacks")
+    head
+        //- Styles
+        link(rel="stylesheet", href="styles/main.css")
+
+        //- Vendor scripts
+        script(src="components/jquery/jquery.min.js")
+        script(src="components/angular/angular.min.js")
+
+    body
+        .title
+            h1 PHONESTACKS
+
+        ng-view
+
+        script(src="js/main.js")

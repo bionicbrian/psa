@@ -4,51 +4,51 @@ module.exports = function (grunt) {
     grunt.initConfig({
         browserify: {
             build: {
-                src: 'app/js/main.js',
-                dest: 'dist/js/main.js'
+                src: 'client/js/main.js',
+                dest: 'public/js/main.js'
             }
         },
         jade: {
             build: {
                 files: [{
                     expand: true,
-                    cwd: 'app/',
+                    cwd: 'client/',
                     src: '**/*.jade',
-                    dest: 'dist/',
+                    dest: 'public/',
                     ext: ".html"
                 }]
             }
         },
         stylus: {
             compile: {
-                src: 'app/styles/main.styl',
-                dest: 'dist/styles/main.css'
+                src: 'client/styles/main.styl',
+                dest: 'public/styles/main.css'
             }
         },
         uglify: {
             libs: {
                 files: [{
                     expand: true,
-                    cwd: 'app/components',
+                    cwd: 'client/components',
                     src: '**/*.js',
-                    dest: 'dist/components'
+                    dest: 'public/components'
                 }]
             }
         },
         copy: {
             all: {
-                // This copies all the html and css into the dist/ folder
+                // This copies all the html and css into the public/ folder
                 expand: true,
-                cwd: 'app/',
+                cwd: 'client/',
                 src: ['**/*.html', '**/*.css'],
-                dest: 'dist/',
+                dest: 'public/',
             },
         },
         connect: {
             server: {
                 options: {
                     port: 8088,
-                    base: 'dist',
+                    base: 'public',
                     keepalive: true
                 }
             }

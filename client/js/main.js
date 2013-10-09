@@ -10,7 +10,6 @@ ps.factory("Stack", function () {
     };
 });
 
-
 function mainCtrl($scope) { }
 
 // Controllers

@@ -5,7 +5,8 @@ module.exports = function createCtrl($scope, $location, Stack) {
     $scope.stack = Stack;
 
     $scope.create = function () {
-        $location.path("/stack");
+        Stack.passphrase = "big red panda";
+        $location.path("/join");
     };
 };
 
@@ -14,9 +15,18 @@ module.exports = function createCtrl($scope, $location, Stack) {
 
 module.exports = function joinCtrl($scope, $location, Stack) {
     $scope.name = "";
+    $scope.passphrase = Stack.passphrase || "";
+
+    // function createStack() {
+    //     if (!Stack.title) {
+    //         Stack.title = "Cool party";
+    //         Stack.penalty = "Buy a round";
+    //     }
+    // }
 
     $scope.join = function () {
-        if ($scope.name) {
+        if ($scope.name && $scope.passphrase && Stack.title) {
+            // createStack();
             Stack.members.push({ name: $scope.name });
             $location.path("/stack");
         }
