@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "node server",
-    "test": "mocha"
+    "test": "mocha -R spec --compilers coffee:coffee-script"
   },
   "author": "",
   "license": "BSD",
