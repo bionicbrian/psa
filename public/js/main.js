@@ -52,6 +52,13 @@ module.exports = function memberCtrl($scope, Stack) {
 
 module.exports = function stackCtrl($scope, Stack) {
     $scope.stack = Stack;
+
+    // $scope.refresh = function () {
+    //     Stack.get($scope.stack.id).then(function (stack) {
+    //         $scope.stack = Stack;
+    //         $scope.apply();
+    //     });
+    // };
 };
 
 },{}],6:[function(require,module,exports){
@@ -110,13 +117,30 @@ module.exports = function LocalResource(app) {
 "use strict";
 
 module.exports = function StackResource(app) {
-    app.factory("Stack", function () {
+    app.factory("Stack", function ($http) {
         var stack = {
             title: "",
             penalty: "",
             members: []
         };
 
+        // stack.create = function (data) {
+        //     return $http.post("api/stack/", data);
+        // };
+
+        // stack.join = function (id, data) {
+        //     return $http.post("api/stack/" + id + "/members", data);
+        // };
+
+        // stack.get = function (id) {
+        //     return $http.get("api/stack/" + id);
+        // };
+
+        // stack.updateMember = function (stackId, memberId) {
+        //     return $http.post("api/stack/" + stackId + "/members/" + memberId);
+        // };
+
+        // 2 PLACEHOLDER METHODS:
         stack.rejoin = function (passphrase, name) {
             // AJAX request here
             stack.title = "Mock title";
@@ -135,11 +159,6 @@ module.exports = function StackResource(app) {
     });
 };
 
-// module.exports = function stackFactory($resource) {
-//     return $resource("/stack/:Id",
-//                      { Id: "@Id" },
-//                      { "update": { method:"PUT" } });
-// };
 },{}],9:[function(require,module,exports){
 "use strict";
 
