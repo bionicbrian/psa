@@ -13,7 +13,7 @@ var publicDir = app.get("env") === "development" ? "public" : "bld";
 app.configure(function () {
     app.set("port", process.env.PORT || 3000);
     app.set("views", __dirname + "/public");
-    // app.set("view engine", "jade");
+    app.set("view engine", "jade");
     app.use(express.favicon());
     app.use(express.logger("dev"));
     app.use(express.bodyParser());

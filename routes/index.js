@@ -12,10 +12,6 @@ router.get("/", function (req, res){
     res.render("index");
 });
 
-router.get("/stack", function (req, res) {
-    res.render("create");
-});
-
 router.post("/stack", checkParams("title", "penalty"), function (req, res) {
     var stack = new Stack({
         title: req.body.title,
