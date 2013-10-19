@@ -40,10 +40,7 @@ module.exports = function StackResource(app) {
         };
 
         stack.create = function (title, penalty) {
-            // AJAX request here
             return $http.get("stack.json");
-            // stack.title = title;
-            // stack.penalty = penalty;
         };
 
         return stack;
