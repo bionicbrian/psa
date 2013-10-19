@@ -2,6 +2,6 @@
     h1 {{stack.title}}
     h3 {{stack.penalty}}
 
-    .members(ng-controller="MemberCtrl")
+    .members
         ul
-            li(ng-repeat="member in members") {{member.name}}
+            li(ng-repeat="member in stack.members") {{member.name}}

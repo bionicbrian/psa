@@ -30,6 +30,8 @@ module.exports = function joinCtrl($scope, $location, Stack, Local) {
 "use strict";
 
 module.exports = function mainCtrl($scope, $location, Stack, Local) {
+    Stack.clear();
+
     if (Local.name) {
         $scope.name = Local.name;
         $scope.title = Local.title;
@@ -51,7 +53,11 @@ module.exports = function memberCtrl($scope, Stack) {
 "use strict";
 
 module.exports = function stackCtrl($scope, Stack) {
-    $scope.stack = Stack;
+    $scope.stack = {};
+
+    Stack.create().then(function (res) {
+        $scope.stack = res.data;
+    });
 
     // $scope.refresh = function () {
     //     Stack.get($scope.stack.id).then(function (stack) {
@@ -117,11 +123,17 @@ module.exports = function LocalResource(app) {
 "use strict";
 
 module.exports = function StackResource(app) {
-    app.factory("Stack", function ($http) {
+    app.factory("Stack", ["$http", function ($http) {
         var stack = {
             title: "",
             penalty: "",
             members: []
+        };
+
+        stack.clear = function () {
+            stack.title = "";
+            stack.penalty = "";
+            stack.members = [];
         };
 
         // stack.create = function (data) {
@@ -151,12 +163,13 @@ module.exports = function StackResource(app) {
 
         stack.create = function (title, penalty) {
             // AJAX request here
-            stack.title = title;
-            stack.penalty = penalty;
+            return $http.get("stack.json");
+            // stack.title = title;
+            // stack.penalty = penalty;
         };
 
         return stack;
-    });
+    }]);
 };
 
 },{}],9:[function(require,module,exports){

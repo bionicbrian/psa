@@ -1,11 +1,17 @@
 "use strict";
 
 module.exports = function StackResource(app) {
-    app.factory("Stack", function ($http) {
+    app.factory("Stack", ["$http", function ($http) {
         var stack = {
             title: "",
             penalty: "",
             members: []
+        };
+
+        stack.clear = function () {
+            stack.title = "";
+            stack.penalty = "";
+            stack.members = [];
         };
 
         // stack.create = function (data) {
@@ -35,10 +41,11 @@ module.exports = function StackResource(app) {
 
         stack.create = function (title, penalty) {
             // AJAX request here
-            stack.title = title;
-            stack.penalty = penalty;
+            return $http.get("stack.json");
+            // stack.title = title;
+            // stack.penalty = penalty;
         };
 
         return stack;
-    });
+    }]);
 };

@@ -1,6 +1,8 @@
 "use strict";
 
 module.exports = function mainCtrl($scope, $location, Stack, Local) {
+    Stack.clear();
+
     if (Local.name) {
         $scope.name = Local.name;
         $scope.title = Local.title;

@@ -40,7 +40,7 @@ module.exports = function (grunt) {
                 // This copies all the html and css into the public/ folder
                 expand: true,
                 cwd: 'client/',
-                src: ['**/*.html', '**/*.css'],
+                src: ['**/*.html', '**/*.css', "**/*.json"],
                 dest: 'public/',
             },
         },
