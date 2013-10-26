@@ -15,10 +15,10 @@ StackResource(ps);
 LocalResource(ps);
 
 // Bootstrap controllers
-ps.controller("MainCtrl", ["$scope", "$location", "Stack", "Local", mainCtrl]);
-ps.controller("CreateCtrl", ["$scope", "$location", "Stack", createCtrl]);
-ps.controller("JoinCtrl", ["$scope", "$location", "Stack", "Local", joinCtrl]);
-ps.controller("StackCtrl", ["$scope", "Stack", stackCtrl]);
+ps.controller("MainCtrl", ["$scope", "$location", "StackRes", "Local", mainCtrl]);
+ps.controller("CreateCtrl", ["$scope", "$location", "StackRes", createCtrl]);
+ps.controller("JoinCtrl", ["$scope", "$location", "StackRes", "Local", joinCtrl]);
+ps.controller("StackCtrl", ["$scope", "StackRes", stackCtrl]);
 
 // Configure routes
 var routes = require("./routes");

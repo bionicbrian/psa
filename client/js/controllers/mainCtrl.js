@@ -1,7 +1,7 @@
 "use strict";
 
-module.exports = function mainCtrl($scope, $location, Stack, Local) {
-    Stack.clear();
+module.exports = function mainCtrl($scope, $location, StackRes, Local) {
+    StackRes.clear();
 
     if (Local.name) {
         $scope.name = Local.name;
@@ -10,7 +10,7 @@ module.exports = function mainCtrl($scope, $location, Stack, Local) {
     }
 
     $scope.rejoin = function () {
-        Stack.rejoin($scope.passphrase, $scope.name);
+        StackRes.rejoin($scope.passphrase, $scope.name);
         $location.path("/stack");
     }
 };

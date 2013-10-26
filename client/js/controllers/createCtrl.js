@@ -1,10 +1,12 @@
 "use strict";
 
-module.exports = function createCtrl($scope, $location, Stack) {
-    $scope.stack = Stack;
+module.exports = function createCtrl($scope, $location, StackRes) {
+    $scope.stack = StackRes.stack;
 
     $scope.create = function () {
-        Stack.passphrase = "big red panda";
-        $location.path("/join");
+        StackRes.create().done(function () {
+            StackRes.stack.passphrase = "stack pacckhrase";
+            $location.path("/join");
+        });
     };
 };
