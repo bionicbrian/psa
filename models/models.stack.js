@@ -34,7 +34,7 @@ stackSchema.methods.addMemberToStack = function (member, callback) {
             stack.save(function (err, stack) {
                 if (err) return callback(err);
                 var result = _.where(stack.members, {"name": member.name})[0];
-                return callback(null, result);
+                return callback(null, stack, result);
             });
         }
     });

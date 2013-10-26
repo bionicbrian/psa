@@ -21,7 +21,7 @@ router.post("/stack", checkParams("title", "penalty"), function (req, res) {
         if (err) return res.json(400, { status: "error", messages: [err.message] });
 
         req.session.passphrase = stack.passphrase;
-        return res.json(200, { status: "success", data: stack });
+        return res.json(200, stack);
     });
 });
 
@@ -37,12 +37,12 @@ router.post("/join", checkParams("passphrase", "name"), function (req, res) {
         stack.addMemberToStack({ "name": req.param("name") }, addedMember);
     }
 
-    function addedMember(err, member) {
+    function addedMember(err, stack, member) {
         if (err) return res.json(400, { status: "error", messages: [err.message] });
 
-        req.session.passphrase = _stack.passphrase;
+        req.session.passphrase = stack.passphrase;
         req.session.memberID = member._id;
-        return res.json(200, { status: "success", data: _stack });
+        return res.json(200, { stack: stack, member: member });
     }
 });
 
