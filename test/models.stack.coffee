@@ -58,18 +58,18 @@ describe "Stack", ->
                 "serviceProvider": "att",
 
             Stack.findOne {"passphrase": validSavedStack.passphrase}, (err, stack) ->
-                stack.addMemberToStack validUser, (err, member) ->
+                stack.addMemberToStack validUser, (err, stack, member) ->
                     if err then throw err
                     member.name.should.equal "Joe Smith"
 
-        it "is not added if the name is already taken", (done) ->
+        it "is not added if the name is already taken", ->
             validUser =
                 "name": "Joe Smith"
 
             Stack.findOne {"passphrase": validSavedStack.passphrase}, (err, stack) ->
+                if err then throw err
                 stack.addMemberToStack validUser, (err) ->
                     err.message.should.match /taken/i
-                    done()
 
         it "is not added without valid attrs", (done) ->
             invalidUser = {}
@@ -79,19 +79,17 @@ describe "Stack", ->
                     err.message.should.match /Validation/i
                     done()
 
-        it "is found in the stack by name", (done) ->
+        it "is found in the stack by name", ->
             Stack.findOne { "passphrase": validSavedStack.passphrase }, (err, stack) ->
                 member = _.where(stack.members, {"name": "Joe Smith"})[0]
                 member.name.should.equal "Joe Smith"
-                done()
 
-        it "is found with all members in a Stack", (done) ->
+        it "is found with all members in a Stack", ->
             Stack.findOne "passphrase": validSavedStack.passphrase, (err, stack) ->
                 stack.members.length.should.equal 1
-                done()
 
-        it "is updated in the stack", (done) ->
+        it "is updated in the stack", ->
             Stack.findOne "passphrase": validSavedStack.passphrase, (err, stack) ->
                 member = _.where(stack.members, {"name": "Joe Smith"})[0]
                 member.inStack = false
-                member.save(done)
+                member.save()

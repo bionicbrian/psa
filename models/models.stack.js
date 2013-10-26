@@ -26,14 +26,14 @@ var stackSchema = new Schema({
 stackSchema.methods.addMemberToStack = function (member, callback) {
     var that = this;
     this.model("Stack").findOne({ passphrase: that.passphrase }, function (err, stack) {
-        var taken = _.where(stack.members, {"name": member.name});
-        if (taken.length > 0) {
-            callback(new Error("Member name taken"));
+        var taken = _.findWhere(stack.members, {"name": member.name});
+        if (taken) {
+            return callback(new Error("Member name taken"));
         } else {
             stack.members.push(member);
             stack.save(function (err, stack) {
                 if (err) return callback(err);
-                var result = _.where(stack.members, {"name": member.name})[0];
+                var result = _.findWhere(stack.members, {"name": member.name});
                 return callback(null, stack, result);
             });
         }
