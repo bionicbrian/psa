@@ -8,7 +8,7 @@ module.exports = function StackResource(app) {
         that.currentMember = {};
 
         function updateStack (res) {
-            that.stack = res.data;
+            that.stack = res.data.stack;
             return $q.when(that.stack);
         }
 
