@@ -18,7 +18,7 @@ router.post("/stack", checkParams("title", "penalty"), function (req, res) {
         penalty: req.body.penalty
     });
     stack.save(function (err, stack) {
-        if (err) return res.json(400, { status: "error", messages: [err.message] });
+        if (err) return res.json(400, { messages: [err.message] });
 
         req.session.passphrase = stack.passphrase;
         return res.json(200, stack);
@@ -26,19 +26,15 @@ router.post("/stack", checkParams("title", "penalty"), function (req, res) {
 });
 
 router.post("/join", checkParams("passphrase", "name"), function (req, res) {
-    var _stack;
-
     Stack.findOne({ "passphrase": req.param("passphrase") }, foundStack);
 
     function foundStack(err, stack) {
-        if (err) return res.json(404, { status: "error", messages: [err.message] });
-
-        _stack = stack;
+        if (err) return res.json(404, { messages: [err.message] });
         stack.addMemberToStack({ "name": req.param("name") }, addedMember);
     }
 
     function addedMember(err, stack, member) {
-        if (err) return res.json(400, { status: "error", messages: [err.message] });
+        if (err) return res.json(400, { messages: [err.message] });
 
         req.session.passphrase = stack.passphrase;
         req.session.memberID = member._id;
