@@ -1,5 +1,6 @@
 .create
     form
-        input(ng-model="stack.title", placeholder="TITLE")
-        input(ng-model="stack.penalty", placeholder="PENALTY")
+        p(ng-show="errorMessage") {{ errorMessage }}
+        input(ng-model="title", placeholder="TITLE")
+        input(ng-model="penalty", placeholder="PENALTY")
         button(ng-click="create()") CREATE

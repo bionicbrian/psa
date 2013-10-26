@@ -1,12 +1,19 @@
 "use strict";
 
 module.exports = function createCtrl($scope, $location, StackRes) {
-    $scope.stack = StackRes.stack;
+    $scope.title = "";
+    $scope.penalty = "";
+    $scope.errorMessage = "";
 
     $scope.create = function () {
-        StackRes.create().done(function () {
-            StackRes.stack.passphrase = "stack pacckhrase";
-            $location.path("/join");
-        });
+        if ($scope.title && $scope.penalty) {
+            $scope.errorMessage = "";
+            StackRes.create($scope.title, $scope.penalty)
+                .then(function () {
+                    $location.path("/join");
+                });
+        } else {
+            $scope.errorMessage = "Please provide a title and penalty";
+        }
     };
 };

@@ -4,55 +4,58 @@ module.exports = function StackResource(app) {
     app.factory("StackRes", ["$http", "$q", function ($http, $q) {
         var that = this;
 
-        var stack = {
-            title: "",
-            penalty: "",
-            members: []
-        };
+        that.stack = {};
+        that.currentMember = {};
+
+        function updateStack (res) {
+            that.stack = res.data;
+            return $q.when(that.stack);
+        }
 
         that.clear = function () {
-            stack.title = "";
-            stack.penalty = "";
-            stack.members = [];
+            that.stack = {};
         };
 
-        // stack.join = function (id, data) {
-        //     return $http.post("api/stack/" + id + "/members", data);
+        // that.refresh = function () {
+        //     return $http.get("api/stack/" + stack._id);
         // };
 
-        // stack.get = function (id) {
-        //     return $http.get("api/stack/" + id);
+        // that.updateMember = function (memberId) {
+        //     return $http.post("api/stack/" + stack._id + "/members/" + memberId);
         // };
-
-        // stack.updateMember = function (stackId, memberId) {
-        //     return $http.post("api/stack/" + stackId + "/members/" + memberId);
-        // };
-
-        // 2 PLACEHOLDER METHODS:
-        that.rejoin = function (passphrase, name) {
-            // AJAX request here
-            stack.title = "Mock title";
-            stack.penalty = "Buy a round";
-            stack.passphrase = passphrase;
-            stack.members.push({ name: name });
-        };
 
         that.create = function (title, penalty) {
-            return $http.get("stack.json").then(function (res) {
-                stack = res.data;
-            });
+            // return $http.get("stack.json").then(updateStack);
+            var data = {
+                title: title,
+                penalty: penalty
+            };
+            return $http.post("/stack", data).then(updateStack);
         };
 
-        that.addMember = function (name) {
-            var deferred = $q.defer();
-            setTimeout(function () {
-                stack.members.push({ "name" : name });
-                deferred.resolve();
-            }, 100);
-            return deferred.promise;
+        that.join = function (name) {
+            if (that.stack._id && that.stack.passphrase) {
+                var data = {
+                    passphrase: that.stack.passphrase,
+                    name: name
+                };
+
+                return $http.post("/join", data)
+                    .then(function (res) {
+                        that.stack = res.data.stack;
+                        that.currentMember = res.data.member;
+                    });
+            }
         };
 
-        that.stack = stack;
+        that.rejoin = function (passphrase, name) {
+            // AJAX request here
+            that.stack.title = "Mock title";
+            that.stack.penalty = "Buy a round";
+            that.stack.passphrase = passphrase;
+            that.stack.members.push({ name: name });
+        };
+
         return that;
     }]);
 };
