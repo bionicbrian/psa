@@ -1,5 +1,6 @@
 .join
     form
+        p(ng-show="errorMessage") {{ errorMessage }}
         input(ng-model="name", placeholder="YOUR NAME")
         input(ng-model="passphrase", placeholder="STACK PASSPHRASE")
         button(ng-click="join()") JOIN
