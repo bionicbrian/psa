@@ -18,12 +18,7 @@ module.exports = function StackResource(app) {
             that.stack = {};
         };
 
-        // that.refresh = function () {
-        //     return $http.get("api/stack/" + stack._id);
-        // };
-
         that.create = function (title, penalty) {
-            // return $http.get("stack.json").then(updateStack);
             var data = {
                 title: title,
                 penalty: penalty
