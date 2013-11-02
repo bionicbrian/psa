@@ -2,6 +2,9 @@
     h1 {{stack.title}}
     h3 {{stack.penalty}}
 
+    button(ng-click="checkOut()") Check Out
+    button(ng-click="checkIn()") Check In
     .members
         ul
-            li(ng-repeat="member in stack.members") {{member.name}}
+            li(ng-repeat="member in stack.members",
+               ng-class="{inactive: isInactive()}") {{member.name}}

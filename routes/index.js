@@ -64,7 +64,7 @@ router.post("/stacks/:stackID/members/:memberID/:inOrOut", function (req, res) {
     function stackSaved(err, stack) {
         if (err) return res.json(400, { status: "error", messages: [err.message] });
 
-        return res.json(200, { status: "success", data: stack });
+        return res.json(200, { status: "success", stack: stack });
     }
 });
 

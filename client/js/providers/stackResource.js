@@ -1,5 +1,7 @@
 "use strict";
 
+var _ = require("underscore");
+
 module.exports = function StackResource(app) {
     app.factory("StackRes", ["$http", "$q", function ($http, $q) {
         var that = this;
@@ -18,10 +20,6 @@ module.exports = function StackResource(app) {
 
         // that.refresh = function () {
         //     return $http.get("api/stack/" + stack._id);
-        // };
-
-        // that.updateMember = function (memberId) {
-        //     return $http.post("api/stack/" + stack._id + "/members/" + memberId);
         // };
 
         that.create = function (title, penalty) {
@@ -48,13 +46,23 @@ module.exports = function StackResource(app) {
             }
         };
 
-        that.rejoin = function (passphrase, name) {
-            // AJAX request here
-            that.stack.title = "Mock title";
-            that.stack.penalty = "Buy a round";
-            that.stack.passphrase = passphrase;
-            that.stack.members.push({ name: name });
-        };
+        function changeStatus(inOrOut) {
+            return function () {
+                var stackId = that.stack._id;
+                var memberId = that.currentMember._id;
+                return $http.post("/stacks/" + stackId + "/members/" + memberId + "/" + inOrOut)
+                    .then(function (res) {
+                        that.stack = res.data.stack;
+                        that.currentMember = _.findWhere(that.stack.members, { "_id": memberId });
+                        console.dir(that.currentMember);
+                    }, function (err) {
+                        console.warn(err);
+                    });
+            };
+        }
+
+        that.checkIn = changeStatus("checkin");
+        that.checkOut = changeStatus("checkout");
 
         return that;
     }]);
