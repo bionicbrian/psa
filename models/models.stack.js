@@ -55,7 +55,11 @@ stackSchema.pre("save", function(next) {
             }
         });
     }
-    tryPassphrase();
+    if (!that.passphrase) {
+        tryPassphrase();
+    } else {
+        next();
+    }
 });
 
 var Stack = mongoose.model('Stack', stackSchema);

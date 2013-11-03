@@ -26,10 +26,10 @@ module.exports = function StackResource(app) {
             return $http.post("/stack", data).then(updateStack);
         };
 
-        that.join = function (name) {
-            if (that.stack._id && that.stack.passphrase) {
+        that.join = function (name, passphrase) {
+            if (name && passphrase) {
                 var data = {
-                    passphrase: that.stack.passphrase,
+                    passphrase: passphrase,
                     name: name
                 };
 
@@ -38,6 +38,8 @@ module.exports = function StackResource(app) {
                         that.stack = res.data.stack;
                         that.currentMember = res.data.member;
                     });
+            } else {
+                throw new Error("Need name and passphrase!");
             }
         };
 
