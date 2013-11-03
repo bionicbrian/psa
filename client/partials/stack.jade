@@ -2,8 +2,8 @@
     h1 {{stack.title}}
     h3 {{stack.penalty}}
 
-    button(ng-click="checkOut()") Check Out
-    button(ng-click="checkIn()") Check In
+    p(ng-show="isCountingDown()") {{timeLeft}}
+    button(ng-show="isInactive()", ng-click="checkIn()") Check In
     .members
         ul
             li(ng-repeat="member in stack.members",
