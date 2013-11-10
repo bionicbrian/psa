@@ -1,0 +1,10 @@
+{
+    "title": "Coolz JZON Partee",
+    "penalty": "Buy a round",
+    "passphrase": "big red panda",
+    "members": [
+        { "name": "James" },
+        { "name": "Brian" },
+        { "name": "Edward" }
+    ]
+}

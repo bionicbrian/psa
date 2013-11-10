@@ -1,0 +1,1 @@
+<div class="stack"><h1>{{stack.title}}</h1><h3>{{stack.penalty}}</h3><p ng-show="isCountingDown()">{{timeLeft}}</p><button ng-show="isInactive()" ng-click="checkIn()">Check In</button><div class="members"><ul><li ng-repeat="member in stack.members" ng-class="{inactive: isInactive(member.name)}">{{member.name}}</li></ul></div></div>
