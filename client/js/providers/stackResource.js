@@ -5,11 +5,29 @@ var _ = require("underscore");
 module.exports = function StackResource(app) {
     app.factory("StackRes", ["$http", "$q", function ($http, $q) {
         var that = this;
+        var timeout;
 
         that.stack = {};
         that.currentMember = {};
 
-        function updateStack (res) {
+        function getStack() {
+            clearTimeout(timeout);
+            console.log("called getStack");
+            var stackId = that.stack._id;
+            var memberId = that.currentMember._id
+
+            return $http.get("/stacks/" + stackId)
+                .then(function (res) {
+                    that.stack = res.data.stack;
+                    that.currentMember = _.findWhere(that.stack.members, { "_id": memberId });
+
+                    timeout = setTimeout(getStack, 5000);
+                }, function () {
+                    timeout = setTimeout(getStack, 5000);
+                });
+        }
+
+        function updateStack(res) {
             that.stack = res.data.stack;
             return $q.when(that.stack);
         }
@@ -33,10 +51,14 @@ module.exports = function StackResource(app) {
                     name: name
                 };
 
+                clearTimeout(timeout);
+
                 return $http.post("/join", data)
                     .then(function (res) {
                         that.stack = res.data.stack;
                         that.currentMember = res.data.member;
+
+                        timeout = setTimeout(getStack, 5000);
                     });
             } else {
                 throw new Error("Need name and passphrase!");
@@ -47,11 +69,14 @@ module.exports = function StackResource(app) {
             return function () {
                 var stackId = that.stack._id;
                 var memberId = that.currentMember._id;
+                clearTimeout(timeout);
                 return $http.post("/stacks/" + stackId + "/members/" + memberId + "/" + inOrOut)
                     .then(function (res) {
                         that.stack = res.data.stack;
                         that.currentMember = _.findWhere(that.stack.members, { "_id": memberId });
                         console.dir(that.currentMember);
+
+                        timeout = setTimeout(getStack, 5000);
                     }, function (err) {
                         console.warn(err);
                     });
