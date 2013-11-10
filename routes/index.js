@@ -18,7 +18,9 @@ router.post("/stack", checkParams("title", "penalty"), function (req, res) {
         penalty: req.body.penalty
     });
     stack.save(function (err, stack) {
-        if (err) return res.json(400, { status: "error", messages: [err.message] });
+        if (err) {
+            return res.json(400, { status: "error", messages: [err.message] });
+        }
 
         req.session.passphrase = stack.passphrase;
         return res.json(200, { status: "success", stack: stack });
@@ -29,12 +31,16 @@ router.post("/join", checkParams("passphrase", "name"), function (req, res) {
     Stack.findOne({ "passphrase": req.param("passphrase") }, foundStack);
 
     function foundStack(err, stack) {
-        if (err) return res.json(404, { status: "error", messages: [err.message] });
+        if (err) {
+            return res.json(404, { status: "error", messages: [err.message] });
+        }
         stack.addMemberToStack({ "name": req.param("name") }, addedMember);
     }
 
     function addedMember(err, stack, member) {
-        if (err) return res.json(400, { status: "error", messages: [err.message] });
+        if (err) {
+            return res.json(400, { status: "error", messages: [err.message] });
+        }
 
         req.session.passphrase = stack.passphrase;
         req.session.memberID = member._id;
@@ -50,33 +56,45 @@ router.post("/stacks/:stackID/members/:memberID/:inOrOut", function (req, res) {
     Stack.findOne({ "_id": stackID }, foundStack);
 
     function foundStack(err, stack) {
-        if (err) return res.json(404, { status: "error", messages: [err.message] });
+        if (err) {
+            return res.json(404, { status: "error", messages: [err.message] });
+        }
 
         var member = stack.members.id(memberID);
 
-        if (!member) return res.json(404, { status: "error", messages: ["Member not found"] });
+        if (!member) {
+            return res.json(404, { status: "error", messages: ["Member not found"] });
+        }
 
         member.inStack = inStack;
-        if (inStack) member.lastCheckIn = new Date();
+        if (inStack) {
+            member.lastCheckIn = new Date();
+        }
         stack.save(stackSaved);
     }
 
     function stackSaved(err, stack) {
-        if (err) return res.json(400, { status: "error", messages: [err.message] });
+        if (err) {
+            return res.json(400, { status: "error", messages: [err.message] });
+        }
 
         return res.json(200, { status: "success", stack: stack });
     }
 });
 
 router.get("/stacks/:stackID", function (req, res) {
-    if (!req.params.stackID) return res.json(400, { status: "error", messages: ["Stack not found"] });
+    if (!req.params.stackID) {
+        return res.json(400, { status: "error", messages: ["Stack not found"] });
+    }
 
     Stack.findOne({ _id: req.params.stackID }, foundStack);
 
     function foundStack(err, stack) {
-        if (err) return res.json(404, { status: "error", messages: ["Stack not found"] });
+        if (err) {
+            return res.json(404, { status: "error", messages: ["Stack not found"] });
+        }
 
-        return res.json(200, { status: "success", data: stack });
+        return res.json(200, { status: "success", stack: stack });
     }
 });
 
