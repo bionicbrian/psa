@@ -12,7 +12,6 @@ module.exports = function StackResource(app) {
 
         function getStack() {
             clearTimeout(timeout);
-            console.log("called getStack");
             var stackId = that.stack._id;
             var memberId = that.currentMember._id
 
@@ -74,7 +73,6 @@ module.exports = function StackResource(app) {
                     .then(function (res) {
                         that.stack = res.data.stack;
                         that.currentMember = _.findWhere(that.stack.members, { "_id": memberId });
-                        console.dir(that.currentMember);
 
                         timeout = setTimeout(getStack, 5000);
                     }, function (err) {
