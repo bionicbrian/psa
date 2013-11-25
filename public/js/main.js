@@ -26,7 +26,11 @@ module.exports = function joinCtrl($scope, $location, StackRes, Local) {
     $scope.name = "";
     $scope.passphrase = StackRes.stack.passphrase || "";
     $scope.phoneNumber = "";
-    $scope.serviceProvider = "";
+    $scope.serviceProviders = [
+        { name:"AT&T", code:"att" },
+        { name:"Verizon", code:"verizon" }
+    ];
+    $scope.serviceProvider = {};
 
     $scope.errorMessage = "";
 
@@ -34,7 +38,7 @@ module.exports = function joinCtrl($scope, $location, StackRes, Local) {
         if ($scope.name && $scope.passphrase) {
             $scope.errorMessage = "";
             StackRes.join($scope.name, $scope.passphrase,
-                          $scope.phoneNumber, $scope.serviceProvider)
+                          $scope.phoneNumber, $scope.serviceProvider.code)
                 .then(function () {
                     Local.create(StackRes.stack.title, $scope.passphrase, $scope.name);
                     $location.path("/stack");

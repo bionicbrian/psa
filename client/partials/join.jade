@@ -4,5 +4,6 @@
         input(ng-model="name", placeholder="YOUR NAME")
         input(ng-model="passphrase", placeholder="STACK PASSPHRASE")
         input(ng-model="phoneNumber", placeholder="YOUR PHONE NUMBER")
-        input(ng-model="serviceProvider", placeholder="YOUR SERVICE PROVIDER")
+        select(ng-model="serviceProvider", ng-options="provider.name for provider in serviceProviders")
+            option(value="") CHOOSE YOUR PROVIDER
         button(ng-click="join()") JOIN
