@@ -3,6 +3,7 @@
         p(ng-show="errorMessage") {{ errorMessage }}
         input(ng-model="name", placeholder="YOUR NAME")
         input(ng-model="passphrase", placeholder="STACK PASSPHRASE")
+        label Phone number and service provider are optional (for updates on Stack violators)
         input(ng-model="phoneNumber", placeholder="YOUR PHONE NUMBER")
         select(ng-model="serviceProvider", ng-options="provider.name for provider in serviceProviders")
             option(value="") CHOOSE YOUR PROVIDER

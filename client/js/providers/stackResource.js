@@ -78,9 +78,9 @@ module.exports = function StackResource(app) {
                         that.stack = res.data.stack;
                         that.currentMember = _.findWhere(that.stack.members, { "_id": memberId });
 
-                        return { stack: that.stack, currentMember: that.currentMember };
-
                         timeout = setTimeout(getStack, 5000);
+
+                        return { stack: that.stack, currentMember: that.currentMember };
                     }, function (err) {
                         console.warn(err);
                     });

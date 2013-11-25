@@ -8,38 +8,9 @@ var express     = require("express");
 var router      = new express.Router();
 var checkParams = require("../lib/checkParams");
 var nodemailer  = require("nodemailer");
+var Notifier    = require("../lib/notifier");
 
-// HELPERS
-// --------------
-var serviceProviders = {
-    "att": "txt.att.net"
-};
-
-function constructEmailAddress(member) {
-    // return member.phoneNumber + "@" + serviceProviders[member.serviceProvider];
-    return "bionicbrian@gmail.com";
-}
-
-function statusChangedMessage (member, inStack) {
-    return member.name + " checked " + (inStack ? "in" : "out") + "!"
-}
-
-var smtpTransport = nodemailer.createTransport("SMTP", {
-    service: "Gmail",
-    auth: {
-        user: "bionicbrian@gmail.com",
-        pass: "Evil666"
-    }
-});
-
-var mailOptions = {
-    from: "Brian Moore <bionicbrian@gmail.com>", // sender address
-    // to: "bionicbrian@gmail.com", // list of receivers
-    // subject: "Hello!", // Subject line
-    // text: "Hello world!", // plaintext body
-};
-
-
+var notifier = new Notifier();
 
 // ROUTES
 // ------------------------
@@ -117,38 +88,15 @@ router.post("/stacks/:stackID/members/:memberID/:inOrOut", function (req, res) {
     }
 
     function stackSaved(err, stack) {
-        var notificationOptions;
-
-        function sendMail(error, response){
-            if (error) {
-                console.log(error);
-            } else {
-                console.log("Message sent: " + response.message);
-            }
-
-            // if you don't want to use this transport object anymore, uncomment following line
-            // smtpTransport.close(); // shut down the connection pool, no more messages
-
-            return res.json(200, { status: "success", stack: stack });
-        }
-
         if (err) {
             return res.json(400, { status: "error", messages: [err.message] });
         }
 
-        console.log("The member is:");
-        console.dir(member);
-
         if (member.phoneNumber && member.serviceProvider) {
-            notificationOptions = _.extend(mailOptions, {
-                to: constructEmailAddress(member),
-                subject: statusChangedMessage(member, inStack),
-            });
-
-            smtpTransport.sendMail(notificationOptions, sendMail);
-        } else {
-            return res.json(200, { status: "success", stack: stack });
+            notifier.sendNotifications(member, inStack);
         }
+
+        return res.json(200, { status: "success", stack: stack });
     }
 });
 
