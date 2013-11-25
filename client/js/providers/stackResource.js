@@ -28,7 +28,7 @@ module.exports = function StackResource(app) {
 
         function updateStack(res) {
             that.stack = res.data.stack;
-            return $q.when(that.stack);
+            return that.stack;
         }
 
         that.clear = function () {
@@ -68,11 +68,15 @@ module.exports = function StackResource(app) {
             return function () {
                 var stackId = that.stack._id;
                 var memberId = that.currentMember._id;
+
                 clearTimeout(timeout);
+
                 return $http.post("/stacks/" + stackId + "/members/" + memberId + "/" + inOrOut)
                     .then(function (res) {
                         that.stack = res.data.stack;
                         that.currentMember = _.findWhere(that.stack.members, { "_id": memberId });
+
+                        return { stack: that.stack, currentMember: that.currentMember };
 
                         timeout = setTimeout(getStack, 5000);
                     }, function (err) {

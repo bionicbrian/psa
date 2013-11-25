@@ -5,7 +5,6 @@ var _ = require("underscore");
 module.exports = function stackCtrl($scope, StackRes, TimerRes) {
     var GRACE = 10;
     $scope.stack = StackRes.stack;
-    $scope.members = StackRes.stack.members;
 
     function safeApply() {
         if (!$scope.$$phase) {
@@ -27,18 +26,24 @@ module.exports = function stackCtrl($scope, StackRes, TimerRes) {
     TimerRes.reset();
 
     $scope.checkIn = function () {
-        StackRes.checkIn().then(function () {
+        StackRes.checkIn().then(function (data) {
+            $scope.stack = data.stack;
+            $scope.members = data.members;
             TimerRes.reset();
         });
     };
 
     $scope.checkOut = function () {
-        StackRes.checkOut().then(safeApply);
+        StackRes.checkOut().then(function (data) {
+            $scope.stack = data.stack;
+            $scope.members = data.members;
+            safeApply();
+        });
     };
 
     $scope.isInactive = function (name) {
         var memberName = name || StackRes.currentMember.name;
-        var member = _.findWhere($scope.members, { name: memberName });
+        var member = _.findWhere($scope.stack.members, { name: memberName });
         return !member.inStack;
     };
 
