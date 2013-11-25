@@ -7,6 +7,23 @@ var Member      = require("../models/models.stack").Member;
 var express     = require("express");
 var router      = new express.Router();
 var checkParams = require("../lib/checkParams");
+var nodemailer  = require("nodemailer");
+
+var smtpTransport = nodemailer.createTransport("SMTP", {
+    service: "Gmail",
+    auth: {
+        user: "bionicbrian@gmail.com",
+        pass: "Evil666"
+    }
+});
+
+var mailOptions = {
+    from: "Brian Moore <bionicbrian@gmail.com>", // sender address
+    to: "bionicbrian@gmail.com", // list of receivers
+    subject: "Hello!", // Subject line
+    text: "Hello world!", // plaintext body
+    html: "<b>hey ho whaddaya say!</b>" // html body
+}
 
 router.get("/", function (req, res){
     res.render("index");
@@ -78,7 +95,18 @@ router.post("/stacks/:stackID/members/:memberID/:inOrOut", function (req, res) {
             return res.json(400, { status: "error", messages: [err.message] });
         }
 
-        return res.json(200, { status: "success", stack: stack });
+        smtpTransport.sendMail(mailOptions, function(error, response){
+            if (error) {
+                console.log(error);
+            } else {
+                console.log("Message sent: " + response.message);
+            }
+
+            // if you don't want to use this transport object anymore, uncomment following line
+            smtpTransport.close(); // shut down the connection pool, no more messages
+
+            return res.json(200, { status: "success", stack: stack });
+        });
     }
 });
 
