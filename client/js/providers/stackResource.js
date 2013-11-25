@@ -43,11 +43,13 @@ module.exports = function StackResource(app) {
             return $http.post("/stack", data).then(updateStack);
         };
 
-        that.join = function (name, passphrase) {
+        that.join = function (name, passphrase, phoneNumber, serviceProvider) {
             if (name && passphrase) {
                 var data = {
                     passphrase: passphrase,
-                    name: name
+                    name: name,
+                    serviceProvider: serviceProvider,
+                    phoneNumber: phoneNumber
                 };
 
                 clearTimeout(timeout);

@@ -9,6 +9,14 @@ var router      = new express.Router();
 var checkParams = require("../lib/checkParams");
 var nodemailer  = require("nodemailer");
 
+var serviceProviders = {
+    "att": "txt.att.net"
+};
+
+function constructEmailAddress(member) {
+    return member.phoneNumber + "@" + serviceProviders[member.serviceProvider];
+}
+
 var smtpTransport = nodemailer.createTransport("SMTP", {
     service: "Gmail",
     auth: {
@@ -19,10 +27,9 @@ var smtpTransport = nodemailer.createTransport("SMTP", {
 
 var mailOptions = {
     from: "Brian Moore <bionicbrian@gmail.com>", // sender address
-    to: "bionicbrian@gmail.com", // list of receivers
-    subject: "Hello!", // Subject line
-    text: "Hello world!", // plaintext body
-    html: "<b>hey ho whaddaya say!</b>" // html body
+    // to: "bionicbrian@gmail.com", // list of receivers
+    // subject: "Hello!", // Subject line
+    // text: "Hello world!", // plaintext body
 }
 
 router.get("/", function (req, res){
@@ -51,7 +58,14 @@ router.post("/join", checkParams("passphrase", "name"), function (req, res) {
         if (err) {
             return res.json(404, { status: "error", messages: [err.message] });
         }
-        stack.addMemberToStack({ "name": req.param("name") }, addedMember);
+
+        var member = {
+            "name": req.param("name"),
+            "phoneNumber": req.param("phoneNumber"),
+            "serviceProvider": req.param("serviceProvider")
+        };
+
+        stack.addMemberToStack(member, addedMember);
     }
 
     function addedMember(err, stack, member) {
@@ -69,6 +83,7 @@ router.post("/stacks/:stackID/members/:memberID/:inOrOut", function (req, res) {
     var stackID = req.params.stackID;
     var memberID = req.params.memberID;
     var inStack = req.params.inOrOut === "checkin" ? true : false;
+    var member;
 
     Stack.findOne({ "_id": stackID }, foundStack);
 
@@ -77,7 +92,7 @@ router.post("/stacks/:stackID/members/:memberID/:inOrOut", function (req, res) {
             return res.json(404, { status: "error", messages: [err.message] });
         }
 
-        var member = stack.members.id(memberID);
+        member = stack.members.id(memberID);
 
         if (!member) {
             return res.json(404, { status: "error", messages: ["Member not found"] });
@@ -95,18 +110,28 @@ router.post("/stacks/:stackID/members/:memberID/:inOrOut", function (req, res) {
             return res.json(400, { status: "error", messages: [err.message] });
         }
 
-        smtpTransport.sendMail(mailOptions, function(error, response){
-            if (error) {
-                console.log(error);
-            } else {
-                console.log("Message sent: " + response.message);
-            }
+        if (member.phoneNumber && member.serviceProvider) {
+            var notificationOptions = _.extend(mailOptions, {
+                to: "bionicbrian@gmail.com",
+                // to: constructEmailAddress(member),
+                subject: member.name + " checked " + (inStack ? "in" : "out") + "!",
+            });
 
-            // if you don't want to use this transport object anymore, uncomment following line
-            smtpTransport.close(); // shut down the connection pool, no more messages
+            smtpTransport.sendMail(notificationOptions, function(error, response){
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log("Message sent: " + response.message);
+                }
 
+                // if you don't want to use this transport object anymore, uncomment following line
+                smtpTransport.close(); // shut down the connection pool, no more messages
+
+                return res.json(200, { status: "success", stack: stack });
+            });
+        } else {
             return res.json(200, { status: "success", stack: stack });
-        });
+        }
     }
 });
 
