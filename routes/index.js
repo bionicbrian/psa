@@ -12,8 +12,6 @@ var Notifier    = require("../lib/notifier");
 
 var notifier = new Notifier();
 
-// ROUTES
-// ------------------------
 router.get("/", function (req, res){
     res.render("index");
 });
@@ -34,7 +32,9 @@ router.post("/stack", checkParams("title", "penalty"), function (req, res) {
 });
 
 router.post("/join", checkParams("passphrase", "name"), function (req, res) {
-    Stack.findOne({ "passphrase": req.param("passphrase") }, foundStack);
+    var passphrase = req.param("passphrase").toLowercase();
+
+    Stack.findOne({ "passphrase": passphrase }, foundStack);
 
     function foundStack(err, stack) {
         if (err) {
