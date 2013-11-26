@@ -93,7 +93,7 @@ router.post("/stacks/:stackID/members/:memberID/:inOrOut", function (req, res) {
         }
 
         if (member.phoneNumber && member.serviceProvider) {
-            notifier.sendNotifications(member, inStack);
+            notifier.sendNotifications(member, inStack, stack);
         }
 
         return res.json(200, { status: "success", stack: stack });
