@@ -32,9 +32,7 @@ router.post("/stack", checkParams("title", "penalty"), function (req, res) {
 });
 
 router.post("/join", checkParams("passphrase", "name"), function (req, res) {
-    var passphrase = req.param("passphrase").toLowercase();
-
-    Stack.findOne({ "passphrase": passphrase }, foundStack);
+    Stack.findOne({ "passphrase": req.param("passphrase").toLowerCase() }, foundStack);
 
     function foundStack(err, stack) {
         if (err) {
